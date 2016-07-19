@@ -1,30 +1,25 @@
 
-
-with open(r'C:\Users\Noli\Documents\Shenzhen\Demos\Tweepy\maketweettext1.txt') as f:
+with open(r'C:\Users\Noli\Documents\Shenzhen\Demos\Twitter\makertweettext1.txt') as f:
     tweetlist = [line.rstrip() for line in f]
 
-new = open(r'C:\Users\Noli\Documents\Shenzhen\Demos\Twitter\noURL.txt','w')
+new = open(r'C:\Users\Noli\Documents\Shenzhen\Demos\Twitter\cleantweettext1.txt','w',encoding='utf-8')
+
 
 def urlremove(tweetlist):
+    temp = []
     for tweet in tweetlist:
         pieces = tweet.split()
         newpieces = [p for p in pieces if not (p.startswith("http"))]
         tweet = " ".join(newpieces)
-        print(tweet,file = new)
-
-urlremove(tweetlist)
-
-with open(r'C:\Users\Noli\Documents\Shenzhen\Demos\Twitter\noURL.txt') as f:
-    tweetlist = [line.rstrip() for line in f]
-
-new = open(r'C:\Users\Noli\Documents\Shenzhen\Demos\Twitter\nobots.txt','w')
+        temp.append(tweet)
+    return temp
 
 def dupremove(tweetlist):
+    temp = []
     unique = set(tweetlist)
     for tweet in unique:
-        print(tweet,file = new)
-
-dupremove(tweetlist)
+        temp.append(tweet)
+    return temp
 
 def botremove(tweetlist):
 	temp = []
@@ -34,10 +29,6 @@ def botremove(tweetlist):
 		tweet = " ".join(newpieces)
 		temp.append(tweet)
 	return set(temp)
-
-test = botremove(tweetlist)
-
-test1 = list(test)
 
 def everything(tweetlist):
     temp = []
@@ -90,59 +81,16 @@ def everything(tweetlist):
         temp.append(text)
     return temp
 
-
-test2 = everything(test1)
-
 def writetweets(tweetlist):
-	newfile = open(r'C:\Users\Noli\Documents\Shenzhen\Demos\Twitter\cleantweettext.txt','w')
-	for tweet in tweetlist:
-		print(tweet,file = newfile)
+    newtweets = urlremove(tweetlist)
+    newtweets1 = dupremove(newtweets)
+    newtweets2 = botremove(newtweets1)
+    newtweets3 = list(newtweets2)
+    newtweets4 = everything(newtweets3)
+    for tweet in newtweets4:
+        print(tweet,file = new)
 
-def countwords(tweetlist):
-	temp = {}
-	for tweet in tweetlist:
-		for word in tweet.split():
-			if word not in temp:
-				temp[word] = 0
-			temp[word] +=1
-	return temp
+writetweets(tweetlist)
 
-test4 = countwords(test2)
+new.close()
 
-def listoflists(tweetlist):
-	temp = []
-	for tweet in tweetlist:
-		temp1 = (tweet.split())
-		temp.append(temp1)
-	return temp
-
-test5 = listoflists(test2)
-
-
-
-import enchant 
-
-def checkwords(worddic):
-	for key in worddic.keys():
-		if not d.check(key):
-			print(key)
-
-def tweetnouns(tweetlist):
-	temp = {}
-	nouncount = 0
-	temp1 = []
-	for tweet in tweetlist:
-		for word in tweet.split():
-			if not d.check(word):
-				nouncount += 1
-		temp1.append(nouncount)
-		temp1.append(len(tweet.split()))
-		temp[tweet] = temp1
-
-def tweetnouns(tweetlist):
-	for tweet in tweetlist:
-		nouncount = 0
-		for word in tweet.split():
-			if not d.check(word):
-				nouncount += 1
-		print(tweet,nouncount,len(tweet.split()),end="\n")
